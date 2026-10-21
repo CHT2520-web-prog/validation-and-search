@@ -1,8 +1,8 @@
 # User Input Validation and a Search Facility
 
-This practical sessions assumes you have a working Laravel application you can add user input validation and a search facility to. 
+This practical builds on the previous introduction to Laravel practical to add user input validation and a search facility. 
 
-If you don't have a working Laravel app, complete the [Introduction to Laravel](https://github.com/CHT2520-web-prog/laravel-start/) practical before attampting this practical work. 
+If you don't have a working Laravel app, complete the [Introduction to Laravel](https://github.com/CHT2520-web-prog/laravel-start/) practical before attempting this practical work. 
 
 ## User Input Validation
 
@@ -32,7 +32,7 @@ public function store(Request $request)
 Next, we'll display the validation errors to the user. 
 
 - Open _create.blade.php_ 
-- Add code that will display the error messages. The `$errors` object is automatically created for use by Laravel. 
+- Add code that will display the error messages. 
 
 ```html
  <h1>Add a new film</h1>
@@ -48,6 +48,7 @@ Next, we'll display the validation errors to the user.
 @endif
 
 ```
+- The `$errors` object is automatically created for use by Laravel. All we have to do is loop over the errors t display them for the user.  
 - Save your files and check this works in a browser.
 - Users should only be able to add a film if they complete all the fields in the form. 
 
@@ -59,13 +60,13 @@ This simple example demonstrates how user input validation works. However, it co
     - The duration field is a number greater than zero.
     - Use the following to help you: https://laravel.com/framework/docs/13.x/validation#available-validation-rules
 
-2. If the form fails validation the error messages all appear in a group in the page. How can you get the error messages to appear next to the control they relate to. See https://laravel.com/framework/docs/13.x/validation#the-at-error-directive for some advice. 
+2. If the form fails validation, the error messages all appear in a group in the page. How can you get the error messages to appear next to the control they relate to. See https://laravel.com/framework/docs/13.x/validation#the-at-error-directive for some advice. 
 
 3. If only one field fails validation, it is annoying for the user to re-enter the data for fields that have passed validation. Try and re-populate the form with previous values, see https://laravel.com/framework/docs/13.x/validation#repopulating-forms for some advice. 
 
 
 ## A Search Facility
-It would make sense to allow users to search the list of film, instead of simply displaying them as a list on the homepage. 
+It would make sense to allow users to search the films in the databse, instead of simply displaying them as a list on the homepage. 
 
 - First add a search box to the _layout.blade.php_
 
@@ -80,7 +81,7 @@ It would make sense to allow users to search the list of film, instead of simply
 
 - Test the page, the search won't work yet, but take note of the url e.g. _films?search=the_ . We are using the same _/films_ route but we have added a search parameter to the querystring. 
 
-- Modify the index method in FilmController so we search films instead of simply getting all of them. 
+- Modify the `index()` method in FilmController so we search films instead of simply grabbing all of them. 
 
 ```php
 public function index(Request $request)
@@ -93,9 +94,9 @@ public function index(Request $request)
 
 - Test this works. You should now be able to search films by the title. 
 
-Previously, we simply used `Film::all()`, now we are using a 'query builder' see (https://laravel.com/framework/docs/eloquent#building-queries). This allows use SQL features such as filtering and ordering.
+Previously, we simply used `Film::all()`, now we are using a 'query builder' see (https://laravel.com/framework/docs/eloquent#building-queries). This allows us to use SQL features such as filtering and ordering.
 
-Previously we would have had to construct our own SQL queries and use a prepared statement. 
+Previously, when writing plain PHP code, we would have had to construct our own SQL queries and use a prepared statement. 
 
 ```sql
 $sql= "SELECT * FROM films WHERE title LIKE :search";
@@ -113,13 +114,13 @@ If this was a real web application we might have thousands of films, and a searc
 
 We can split search results over multiple pages using 'pagination'
 
-- in the `index()` method change the query to the following (we simply replace `get` with `paginate`)
+- In the `index()` method change the query to the following (we simply replace `get` with `paginate`)
 
 ```php
 $films = Film::where('title', 'like', '%' . $search . '%')->paginate(3);
 ```
 
-In _index.blade.php_ ,outside the for loop, add the following line that will display the pagination links
+In _index.blade.php_ ,outside the `for` loop, add the following line that will display the pagination links
 
 ```html
  {{ $films->links() }}
@@ -127,7 +128,7 @@ In _index.blade.php_ ,outside the for loop, add the following line that will dis
 
 - Test this works. The user should be able to navigate through multiple pages of links. 
 
-The pagination links will look odd because Laravel generates links assuming we are using the Tailwind CSS framework to style the app.
+The pagination links will look odd because by Laravel assumes we are using the Tailwind CSS framework to style the app.
 
 We can use our own HTML code for the pagination links instead of using the default code.
 
@@ -157,14 +158,14 @@ Add the following code in this file:-
     </nav>
 @endif
 ```
-This is largely HTML but calls to a cursor paginator object to display the correct navigation controls. You can read abotu the various methods of the cursor pagination class here: https://laravel.com/framework/docs/13.x/pagination#cursor-paginator-instance-methods
+This is largely HTML but makes calls to a cursor paginator object to display the correct navigation controls. You can read about the various methods of the cursor pagination class here: https://laravel.com/framework/docs/13.x/pagination#cursor-paginator-instance-methods
 
 
-Next, we need to tell Laravel to use this view file instead of the default Tailwind styling.
+Next, we need to tell Laravel to use this view file instead of the default one.
 
-- Open app/Providers/AppServiceProvider.php
+- Open _app/Providers/AppServiceProvider.php_.
 
-Import the Paginator class (at the top of the page with the other 'use' statements)
+Import the Paginator class (at the top of the page with the other `use` statements)
 
 ```php
 use Illuminate\Pagination\Paginator;
@@ -183,30 +184,16 @@ Test this works, the page should feature simple, unstyled pagination links.
 
 ### Test Your Understanding
 - A well designed search facility should
-- Give feedback on the number of search results found the for the entered search term e.g. _'3 results for "the"'_
-
-
-Eloquent vs Query Builder
-
-
-
-https://laravel.com/framework/docs/eloquent#building-queries
+    - Give feedback on the number of search results found for the entered search term e.g. _'3 results for "the"'_
+    - Let the user know if no search results were found. 
+- Modify your code to implement these improvements. 
+    - You can use `films->total()` in `index.blade.view` to display the count of films. 
 
 
 
 
-## Further study
-request objects
-querying
-count results
-display no results found
-display the entered search term
 
-update
 
-Can you use the current year to prevent users entering a film that hasn't been released yet. 
-
-https://laravel.com/framework/docs/13.x/validation#custom-validation-rules
 
 
 
