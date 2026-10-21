@@ -58,11 +58,11 @@ This simple example demonstrates how user input validation works. However, it co
 1. We have used very simple validation rules i.e. we simply check if the fields have been completed. Modify the rules to make sure
     - The year value is a number greater than 1895 (when cinema was invented).
     - The duration field is a number greater than zero.
-    - Use the following to help you: https://laravel.com/framework/docs/13.x/validation#available-validation-rules
+    - Use the following to help you: https://laravel.com/framework/docs/validation#available-validation-rules
 
-2. If the form fails validation, the error messages all appear in a group in the page. How can you get the error messages to appear next to the control they relate to. See https://laravel.com/framework/docs/13.x/validation#the-at-error-directive for some advice. 
+2. If the form fails validation, the error messages all appear in a group in the page. How can you get the error messages to appear next to the control they relate to. See https://laravel.com/framework/docs/validation#the-at-error-directive for some advice. 
 
-3. If only one field fails validation, it is annoying for the user to re-enter the data for fields that have passed validation. Try and re-populate the form with previous values, see https://laravel.com/framework/docs/13.x/validation#repopulating-forms for some advice. 
+3. If only one field fails validation, it is annoying for the user to re-enter the data for fields that have passed validation. Try and re-populate the form with previous values, see https://laravel.com/framework/docs/validation#repopulating-forms for some advice. 
 
 
 ## A Search Facility
@@ -158,7 +158,7 @@ Add the following code in this file:-
     </nav>
 @endif
 ```
-This is largely HTML but makes calls to a cursor paginator object to display the correct navigation controls. You can read about the various methods of the cursor pagination class here: https://laravel.com/framework/docs/13.x/pagination#cursor-paginator-instance-methods
+This is largely HTML but makes calls to a cursor paginator object to display the correct navigation controls. You can read about the various methods of the cursor pagination class here: https://laravel.com/framework/docs/pagination#cursor-paginator-instance-methods
 
 
 Next, we need to tell Laravel to use this view file instead of the default one.
@@ -187,7 +187,14 @@ Test this works, the page should feature simple, unstyled pagination links.
     - Give feedback on the number of search results found for the entered search term e.g. _'3 results for "the"'_
     - Let the user know if no search results were found. 
 - Modify your code to implement these improvements. 
-    - You can use `films->total()` in `index.blade.view` to display the count of films. 
+    - You can use `films->total()` in `index.blade.view` to get the count of films. 
+
+## More Things to Think About
+It can be argued that adding validation rules in our controllers violates the 'single responsibility' principle. Generally we should aim to have **skinny** controllers.
+
+A more sophisticated approach to user input validation involves using a custom request object. This allows us to move user input validation rules out of our controller into a dedicated request class. See https://laravel.com/framework/docs/validation#form-request-validation.
+
+Sometimes we need to go beyond the basic validation rules that Laravel provides. For example, we might want to test the year of a film is greater than 1895, but no greater than the current year. To do this we can create custom validation rules. See https://laravel.com/framework/docs/validation#custom-validation-rules
 
 
 
