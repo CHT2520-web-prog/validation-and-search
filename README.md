@@ -117,7 +117,7 @@ We can split search results over multiple pages using 'pagination'
 - In the `index()` method change the query to the following (we simply replace `get` with `paginate`)
 
 ```php
-$films = Film::where('title', 'like', '%' . $search . '%')->paginate(3)-withQueryString();
+$films = Film::where('title', 'like', '%' . $search . '%')->paginate(3)->withQueryString();
 ```
 
 In _index.blade.php_ ,outside the `for` loop, add the following line that will display the pagination links
